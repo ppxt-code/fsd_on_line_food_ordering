@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Login</title>
+</head>
+
+<body>
+    <div class="flex min-h-screen container mx-auto">
+        <div class="w-1/2 p-20">
+            <h1 class="text-blue-600 text-3xl font-bold">Login</h1> <br><br>
+            <h2 class="text-2xl font-bold">Welcome back!</h2>
+            <p>Enter your email address and password to access admin panel.</p>
+            <br><br>
+            <form onsubmit="loginSubmit(event)">
+                <div class="flex flex-col">
+                    <label for="email">Email address</label>
+                    <input id="email" type="email"
+                        class="border border-gray-300 rounded-md focus:ring-4 focus:ring-blue-300 focus:outline-none" />
+                    <label for="password">Password</label>
+                    <input id="password" type="password"
+                        class="border border-gray-300 rounded-md focus:ring-4 focus:ring-blue-300 focus:outline-none">
+                    <br><br>
+                    <div class="flex gap-2">
+                        <button type="submit" class="border border-gray-800 p-2 rounded-md">Login</button>
+                        <button type="reset" class="border border-gray-800 p-2 rounded-md">Reset</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="w-1/2 bg-cover bg-center flex flex-col justify-end p-12" style="background-image:url('data/roasted-chicken.webp');">
+            <h2 class="text-white text-3xl font-bold text-center">Fresh & Fast</h2><br>
+            <p  class="text-white text-xl text-center">"Order your favorite meals in just a few clicks.<br>
+                Fresh food delivered to your door, fast and hassle-free."</p><br>
+            <p  class="text-white text-md font-bold text-center">- Gourmet</p>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
