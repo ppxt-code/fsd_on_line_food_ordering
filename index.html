@@ -8,24 +8,25 @@
     <title>Home</title>
 </head>
 
-<body>
+<body onload="init()">
     <div class="container mx-auto flex">
-        <h2 class="absolute left-0">client hit for this app!</h2>
-        <button onclick="logoutClicked(event)" class="border border-black p-2 rounded-sm ml-auto mr-4">logout</button>
+        <h2 id="nbvisited" class="absolute left-0 text-2xl text-yellow-500 font-bold font-serif"></h2>
+        <button onclick="logoutClicked(event)" class="border-x border-t border-b-0 border-black p-2 mt-2 rounded-sm ml-auto mr-4 hover:bg-blue-200">logout</button>
     </div>
     <div class="flex container mx-auto bg-gray-100 md:gap-20 gap-10">
         <div class="flex flex-col p-10 shrink-0">
             <img src="data/freshAndStart.png" class="lg:w-48 lg:h-48 w-24 h-24 object-cover rounded-full" />
             <br><br>
             <nav class="flex flex-col font-bold text-lg text-gray-400 gap-8">
-                <a href="#" data-page="menu.html">Services</a>
-                <a href="#" data-page="cart.html">Your Orders</a>
-                <a href="#" data-page="menu.html" data-action="wishlist">Wishlist</a>
+                <a href="#" data-page="menu.html" class="hover:font-extrabold">Services</a>
+                <a href="#" data-page="cart.html" class="hover:font-extrabold">Your Orders</a>
+                <a href="#" data-page="menu.html" data-action="wishlist" class="hover:font-extrabold">Wishlist</a>
+                <a href="#" data-page="contact.html" class="hover:font-extrabold">Contact Us</a>
             </nav>
         </div>
         <div id="app" class="w-full"></div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script> <!-- for generating QR code -->
     <script src="js/main.js"></script>
 </body>
 

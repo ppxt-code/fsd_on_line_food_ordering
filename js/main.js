@@ -1,9 +1,18 @@
 // global variables : menuItems, cart, hasbeenloaded, searchMode, likes, qrcodetext
-hasbeenloaded = false; searchMode = false;
-if (!hasbeenloaded) { cart = []; menuItems = []; likes = [] }
+let nbclients = Number(localStorage.getItem("nbclients")) || 0;
+let hasbeenloaded ; let searchMode; let showAddressMode;
+let cart; let menuItems; let likes; let qrcodetext;
+function init() {
+    hasbeenloaded = false; searchMode = false; showAddressMode = false; qrcodetext = "";
+    cart = []; menuItems = []; likes = [];
+    let nbvisitedElt = document.getElementById("nbvisited");
+    if (nbvisitedElt) nbvisitedElt.innerText = `${nbclients} users have visited this app!`;
+}
 
 function loginSubmit(event) {
+    init();
     event.preventDefault();
+    nbclients++; localStorage.setItem("nbclients", nbclients);
     window.location.href = "index.html";
 }
 function logoutClicked(event) {
@@ -43,7 +52,7 @@ async function initMenuPage() {
                 html += `<button onclick="categoryClicked('${item.category}')">
                             <div class="flex items-center gap-4"> 
                                 <img src="${item.image}" class="lg:w-20 lg:h-20 w-10 h-10 rounded-full transition-transform duration-300 hover:scale-110"/> 
-                                <p>${item.category}</p>
+                                <p class="text-orange-800 text-xl">${item.category}</p>
                             </div>
                         </button>`;
             if (categoriesElt) categoriesElt.innerHTML = html;
@@ -87,9 +96,9 @@ function fillEltWithArray(itemsArr, itemsId, appendMode=false) {
                             <button onclick="addToCart(${item.id})">
                                 <img src="${item.image}" class="mx-auto w-24 h-24 sm:w-32 sm:h-32 rounded-full transition-transform duration-300 hover:scale-110"/> 
                             </button>
-                            <p>${item.name}</p> 
+                            <p class="text-md font-bold text-gray-500">${item.name}</p> 
                         </div>
-                        <p>Price: $${item.price}</p>
+                        <p class="font-bold px-5">Price: $${item.price}</p>
                     </div>`;
         }
         const itemsArrElt = document.getElementById(itemsId);
@@ -226,6 +235,11 @@ function offers() {
         fillEltWithArray(group, "itemsByCategory",true);
     }
 }
+//------------------- contact:
+function sendEmail(event) {
+    event.preventDefault();
+    alert("Sending email... from: "+document.getElementById("email").value+" name: "+document.getElementById("name").value+" message: "+document.getElementById("message").value);
+}
 //------------------- index:
 function initIndexPage() {
     document.addEventListener("click", async (e) => {
@@ -235,4 +249,9 @@ function initIndexPage() {
         await loadPage(link.dataset.page);
         if (link.dataset.action === "wishlist") showWishlist();
     });
+}
+//------------------- miscellaneous:
+function toggleShowAddress() {
+    showAddressMode = !showAddressMode;
+    document.getElementById("address").hidden = !showAddressMode;
 }
