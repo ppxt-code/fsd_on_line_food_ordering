@@ -1,7 +1,6 @@
 // global variables : menuItems, cart, hasbeenloaded, searchMode, likes, qrcodetext
 hasbeenloaded = false; searchMode = false;
 if (!hasbeenloaded) { cart = []; menuItems = []; likes = [] }
-currentItemsArr = []; currentItemsId = ""; // keep in memory to refresh panel with fillEltWithArray
 
 function loginSubmit(event) {
     event.preventDefault();
@@ -63,8 +62,7 @@ function categoryClicked(category) {
         fillEltWithArray(itemsArr, "itemsByCategory");
     }
 }
-function fillEltWithArray(itemsArr, itemsId) {
-    if (itemsArr && itemsId != "") { currentItemsArr = itemsArr; currentItemsId = itemsId }
+function fillEltWithArray(itemsArr, itemsId, appendMode=false) {
     if (itemsArr) {
         let html = "";
         for (item of itemsArr) {
@@ -78,7 +76,7 @@ function fillEltWithArray(itemsArr, itemsId) {
 </svg>
                                     ${notation}
                                 </span>
-                                <button onclick="toggleLike(${item.id})" class="w-fit bg-white rounded-full p-2">
+                                <button id="like-btn-${item.id}-${itemsId}" onclick="toggleLike(${item.id},'${itemsId}')" class="w-fit bg-white rounded-full p-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" 
                                      fill="${likes.includes(item.id) ? 'currentColor' : 'none'}" 
                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -95,7 +93,10 @@ function fillEltWithArray(itemsArr, itemsId) {
                     </div>`;
         }
         const itemsArrElt = document.getElementById(itemsId);
-        if (itemsArrElt) itemsArrElt.innerHTML = html;
+        if (itemsArrElt) {
+            if (appendMode) itemsArrElt.innerHTML += html;
+            else            itemsArrElt.innerHTML = html;
+        }
     }
 }
 function getMenuItems() {
@@ -137,7 +138,7 @@ async function initCartPage() {
     html += `<br><h2 class="font-bold text-xl text-red-600">Total : $${(totalPrice - totalDiscount).toFixed(2)} (Discount : $${(totalDiscount).toFixed(2)})</h2>`;
     const cartElt = document.getElementById("cart");
     cartElt.innerHTML = html;
-    qrcodetext = `Total : $${(totalPrice - totalDiscount).toFixed(2)} (Discount : $${(totalDiscount).toFixed(2)})`;//global
+    qrcodetext = `Total : $${(totalPrice - totalDiscount).toFixed(2)} (Discount : $${(totalDiscount).toFixed(2)}) -`;//global
 }
 function addToCart(id) {
     cart.push(id);
@@ -155,17 +156,30 @@ function togglesearchMode() {
     searchMode = !searchMode;
     document.getElementById("search-string").hidden = !searchMode;
 }
+function smartsearch(searchString, string) {
+    let searchWords = searchString.split(" ");
+    if (searchWords.length === 1) return string.includes(searchString);
+    for (searchword of searchWords) if (!string.includes(searchword)) return false;
+    return true;
+}
 function searchingFor(searchString) {
     if (searchString.trim() === "") return;
-    let foundElts = menuItems.filter(elt => elt.name.toLowerCase().includes(searchString.toLowerCase()));
+    let foundElts = menuItems.filter(elt => smartsearch(searchString.toLowerCase(), elt.name.toLowerCase()));
     fillEltWithArray(foundElts, "itemsByCategory");
     document.getElementById("category").innerText = "";
 }
 //------------------- Wishlist:
-function toggleLike(id) {
-    if (likes.includes(id)) likes = likes.filter(item => item !== id);
-    else likes.push(id);
-    fillEltWithArray(currentItemsArr, currentItemsId);
+function toggleLike(id, itemsId) {
+    let like=false;
+    if (likes.includes(id)) {like=false; likes = likes.filter(item => item !== id);}
+    else                    {like=true; likes.push(id);}
+    let likeBtn = document.getElementById(`like-btn-${id}-${itemsId}`);
+    if (likeBtn) likeBtn.innerHTML 
+        = `<svg xmlns="http://www.w3.org/2000/svg" 
+                                     fill="${like ? 'currentColor' : 'none'}" 
+                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+</svg>`;
 }
 function showWishlist() {
     let wishlist = [];
@@ -183,10 +197,11 @@ async function checkout() {
 }
 async function initCheckoutPage() {
     document.getElementById("qrcode").innerHTML = "";
+    let nb = Math.floor(Math.random() * 1000);
     let qr;
     try {
         qr = new QRCode(document.getElementById("qrcode"), {
-            text: qrcodetext,
+            text: qrcodetext+nb,
             width: 200,
             height: 200,
             colorDark: "#000000",
@@ -198,6 +213,18 @@ async function initCheckoutPage() {
         alert("Failed to generate QR code.");
     }
 
+}
+//------------------- Offers:
+function offers() {
+    document.getElementById("category").innerText = "";
+    let foundElts = menuItems.filter(elt => elt.discount > 0);
+    document.getElementById("itemsByCategory").innerHTML = "";
+    let groups = Object.entries(Object.groupBy(foundElts, elt => elt.discount)).sort((a, b) => b[0] - a[0]);
+    for (const [discount, group] of groups) {
+        document.getElementById("itemsByCategory").innerHTML 
+            += `<div class="col-span-full text-xl font-bold">Offers (${discount}%)</div>`;
+        fillEltWithArray(group, "itemsByCategory",true);
+    }
 }
 //------------------- index:
 function initIndexPage() {

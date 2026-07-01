@@ -7,7 +7,7 @@
 </svg>
                 <span>Search</span>
             </button>
-            <button class="border-red-600 border-2 text-red-600 rounded-3xl p-2 inline-flex gap-2 font-bold">
+            <button onclick="offers()" class="border-red-600 border-2 text-red-600 rounded-3xl p-2 inline-flex gap-2 font-bold">
                 <span>Offers</span>
             </button>
             <span class="border-2 border-red-600 text-red-600 rounded-3xl p-2 inline-flex gap-2 font-bold">
@@ -17,9 +17,9 @@
         </div>
         <br>
         <h2 id="category" class="text-orange-500 font-bold text-5xl"></h2> <br><br>
-        <input id="search-string" type="text" placeholder="searching for..." onchange="searchingFor(this.value)"
-            class="border border-gray-300 rounded-md focus:ring-4 focus:ring-blue-300 focus:outline-none"  hidden />
-        <br>
+        <input id="search-string" type="text" placeholder="searching by name..." onchange="searchingFor(this.value)"
+            class="p-2 border border-gray-300 rounded-md focus:ring-4 focus:ring-blue-300 focus:outline-none"  hidden />
+        <br><br>
         <div id="itemsByCategory"
             class="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 grid-cols-1 gap-4"></div>
     </div>
