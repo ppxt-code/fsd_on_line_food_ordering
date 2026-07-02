@@ -1,31 +1,31 @@
 <div class="flex w-full">
     <div class="md:w-2/3 w-1/2 md:p-10 p-5">
         <div class="flex flex-row flex-wrap gap-2">
-            <button id="search-tag" onclick="togglesearchMode()" class="hover:bg-blue-100 border-red-600 border-2 text-red-600 rounded-3xl p-2 inline-flex gap-2 font-bold font-serif">               
+            <button id="search-tag" onclick="togglesearchMode()" class="text-xs sm:text-md hover:bg-blue-100 border-red-600 border-2 text-red-600 rounded-3xl sm:p-2 inline-flex sm:gap-2 font-bold font-serif">               
                 <span>Search</span>
             </button>
-            <button id="offers-tag" onclick="offers()" class="hover:bg-blue-100 border-red-600 border-2 text-red-600 rounded-3xl p-2 inline-flex gap-2 font-bold font-serif">               
+            <button id="offers-tag" onclick="offers()" class="text-xs sm:text-md hover:bg-blue-100 border-red-600 border-2 text-red-600 rounded-3xl sm:p-2 inline-flex sm:gap-2 font-bold font-serif">               
                 <span>Offers</span>
             </button>
-            <span id="cart-tag"class="border-2 border-red-600 text-red-600 rounded-3xl p-2 inline-flex gap-2 font-bold font-serif">
+            <span id="cart-tag" class="text-xs sm:text-md border-2 border-red-600 text-red-600 rounded-3xl sm:p-2 inline-flex sm:gap-2 font-bold font-serif">
                 <span id="cart-count">0 Items</span>
             </span>
         </div>
         <br>
-        <h4 id="address" class="text-green-600 text-2xl font-bold" hidden>🥑 7 Avocado Avenue, Sunrise District<br></h4>
-        <h2 id="category" class="text-orange-500 font-bold text-5xl"></h2> <br><br>
+        <h4 id="address" class="text-green-600 text-xs sm:text-2xl font-bold" hidden>🥑 7 Avocado Avenue, Sunrise District<br></h4>
+        <h2 id="category" class="text-orange-500 font-bold text-xs sm:text-5xl"></h2> <br><br>
         <input id="search-string" type="text" placeholder="searching by name..." onchange="searchingFor(this.value)"
-            class="lg:w-2/3 w-full  p-2 border border-gray-300 rounded-md focus:ring-4 focus:ring-blue-300 focus:outline-none"  hidden />
+            class="lg:w-2/3 w-full text-xs sm:text-md sm:p-2 border border-gray-300 rounded-md focus:ring-4 focus:ring-blue-300 focus:outline-none"  hidden />
         <br><br>
         <div id="itemsByCategory"
             class="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 grid-cols-1 gap-4"></div>
     </div>
     <div class="md:w-1/3 w-1/2 justify-end md:p-10 p-5">
-        <button id="address-tag" onclick="toggleShowAddress()" class="hover:bg-blue-100 border-red-600 border-2 text-red-600 rounded-3xl p-2 inline-flex gap-2 font-bold font-serif">
+        <button id="address-tag" onclick="toggleShowAddress()" class="text-xs sm:text-md hover:bg-blue-100 border-red-600 border-2 text-red-600 rounded-3xl sm:p-2 inline-flex sm:gap-2 font-bold font-serif">
             <span>Address</span>
         </button>
         <br><br>
-        <h2 class="text-orange-800 text-3xl font-bold">Go For Hunt</h2> 
+        <h2 class="text-orange-800 text-xs sm:text-3xl font-bold">Go For Hunt</h2> 
         <div class="h-px bg-orange-800 w-24 mt-2"></div><br>
         <div id="categories" class="flex flex-col gap-4"></div>
     </div>

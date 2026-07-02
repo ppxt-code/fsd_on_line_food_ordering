@@ -1,24 +1,38 @@
 // global variables : menuItems, cart, hasbeenloaded, searchMode, likes, qrcodetext
+// localStorage : nbclients, isloggedin
 let nbclients = Number(localStorage.getItem("nbclients")) || 0;
+let isloggedin = localStorage.getItem("isloggedin") === "true";
 let hasbeenloaded ; let searchMode; let showAddressMode;
 let cart; let menuItems; let likes; let qrcodetext;
 function init() {
+    if (!isloggedin) { window.location.href = "login.html"; return;}
     hasbeenloaded = false; searchMode = false; showAddressMode = false; qrcodetext = "";
     cart = []; menuItems = []; likes = [];
     let nbvisitedElt = document.getElementById("nbvisited");
     if (nbvisitedElt) nbvisitedElt.innerText = `${nbclients} users have visited this app!`;
 }
-
+//------------------- login:
 function loginSubmit(event) {
-    init();
     event.preventDefault();
+    let loginsuccess = document.getElementById("email").value === "admin@gmail.com" && document.getElementById("password").value === "admin";
+    if (!loginsuccess) {alert("Wrong email or password!"); return;}
+    document.getElementById("login-form").reset();
+    init();
     nbclients++; localStorage.setItem("nbclients", nbclients);
+    localStorage.setItem("isloggedin", "true");
     window.location.href = "index.html";
 }
 function logoutClicked(event) {
+    localStorage.setItem("isloggedin", "false");
     window.location.href = "login.html";
 }
-
+function loginPageReset() {
+    const form = document.getElementById("login-form");
+    if (form) form.reset();
+}
+window.addEventListener("DOMContentLoaded", loginPageReset);
+window.addEventListener("pageshow", loginPageReset);
+//------------------- page loading:
 const app = document.getElementById("app");
 if (app) initIndexPage();
 const pageInits = {
@@ -52,7 +66,7 @@ async function initMenuPage() {
                 html += `<button onclick="categoryClicked('${item.category}')">
                             <div class="flex items-center gap-4"> 
                                 <img src="${item.image}" alt="${item.name}" class="lg:w-20 lg:h-20 w-10 h-10 rounded-full transition-transform duration-300 hover:scale-110"/> 
-                                <p class="text-orange-800 text-xl">${item.category}</p>
+                                <p class="text-orange-800 text-xs sm:text-xl">${item.category}</p>
                             </div>
                         </button>`;
             if (categoriesElt) categoriesElt.innerHTML = html;
@@ -91,28 +105,28 @@ function fillEltWithArray(itemsArr, itemsId, appendMode=false) {
         for (item of itemsArr) {
             notation = mean(item.notation).toFixed(1);//1 digit
             html += `<div> 
-                        <div class="flex flex-col bg-pink-100 rounded-md p-5">
+                        <div class="flex flex-col bg-pink-100 rounded-md sm:p-5">
                             <div class="flex justify-around">
-                                <span class="flex gap-1 w-fit rounded-3xl p-2 bg-black text-orange-200">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <span class="flex sm:gap-1 w-fit rounded-2xl sm:rounded-3xl p-1 sm:p-2 bg-black text-orange-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sm:size-6 size-4">
   <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
 </svg>
-                                    ${notation}
+                                    <p class="text-xs sm:text-md">${notation}</p>
                                 </span>
                                 <button id="like-btn-${item.id}-${itemsId}" onclick="toggleLike(${item.id},'${itemsId}')" class="w-fit bg-white rounded-full p-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" 
                                      fill="${likes.includes(item.id) ? 'currentColor' : 'none'}" 
-                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sm:size-6 size-4">
   <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
 </svg>
                                 </button>
                             </div>
                             <button onclick="addToCart(${item.id})">
-                                <img src="${item.image}" alt="${item.name}" class="mx-auto w-24 h-24 sm:w-32 sm:h-32 rounded-full transition-transform duration-300 hover:scale-110"/> 
+                                <img src="${item.image}" alt="${item.name}" class="mx-auto w-12 h-12 md:w-24 md:h-24 sm:w-32 sm:h-32 rounded-full transition-transform duration-300 hover:scale-110"/> 
                             </button>
-                            <p class="text-md font-bold text-gray-500">${item.name}</p> 
+                            <p class="text-xs sm:text-md font-bold text-gray-500">${item.name}</p> 
                         </div>
-                        <p class="font-bold px-5">Price: $${item.price}</p>
+                        <p class="text-xs sm:text-md font-bold sm:px-5">Price: $${item.price}</p>
                     </div>`;
         }
         const itemsArrElt = document.getElementById(itemsId);
@@ -151,14 +165,14 @@ async function initCartPage() {
         if (item) {
             html += `<div class="grid grid-cols-5 gap-4 font-bold items-center">
                         <img src="${item.image}" alt="${item.name}" class="lg:w-20 lg:h-20 w-10 h-10">
-                        <div class="col-span-2">${item.name} Price: $${item.price}</div>
-                        <div class="col-span-2">Quantity:<input type="number" min="0" value="${ids.length}" onchange="changeQuantity(${id}, Number(this.value))" class="w-20 p-2"</input></div>
+                        <div class="col-span-2 text-xs sm:text-md">${item.name} Price: $${item.price}</div>
+                        <div class="col-span-2 text-xs sm:text-md">Quantity:<input type="number" min="0" value="${ids.length}" onchange="changeQuantity(${id}, Number(this.value))" class="w-10 sm:w-20 p-2"</input></div>
                       </div>`;
             totalPrice += item.price * ids.length;
             totalDiscount += item.price * ids.length * item.discount / 100;
         }
     }
-    html += `<br><h2 class="font-bold text-xl text-red-600">Total : $${(totalPrice - totalDiscount).toFixed(2)} (Discount : $${(totalDiscount).toFixed(2)})</h2>`;
+    html += `<br><h2 class="font-bold text-md sm:text-xl text-red-600">Total : $${(totalPrice - totalDiscount).toFixed(2)} (Discount : $${(totalDiscount).toFixed(2)})</h2>`;
     const cartElt = document.getElementById("cart");
     cartElt.innerHTML = html;
     qrcodetext = `Total : $${(totalPrice - totalDiscount).toFixed(2)} (Discount : $${(totalDiscount).toFixed(2)}) -`;//global
@@ -203,7 +217,7 @@ function toggleLike(id, itemsId) {
     if (likeBtn) likeBtn.innerHTML 
         = `<svg xmlns="http://www.w3.org/2000/svg" 
                                      fill="${like ? 'currentColor' : 'none'}" 
-                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sm:size-6 size-4">
   <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
 </svg>`;
 }
@@ -256,7 +270,7 @@ function offers() {
 //------------------- contact:
 function sendEmail(event) {
     event.preventDefault();
-    alert("Sending email... from: "+document.getElementById("email").value+" name: "+document.getElementById("name").value+" message: "+document.getElementById("message").value);
+    alert("Sending email... from: "+document.getElementById("mail").value+" name: "+document.getElementById("name").value+" message: "+document.getElementById("message").value);
 }
 //------------------- index:
 function initIndexPage() {
