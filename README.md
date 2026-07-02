@@ -92,6 +92,7 @@ After successful authentication, the user is redirected to **index.html**.
 
 ## 🏠 Main Page
 
+The main page displays the number of visitors of this page (this information is stored in the local storage and incremented) 
 The main page contains the following navigation menu:
 
 - Services
